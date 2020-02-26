@@ -1,0 +1,65 @@
+Load kmer depth frequency file...
+File load finished, the last depth is 255
+load node number 101211427 total kmer number 2442901555
+
+For P(x):
+Possible peaks including: 20	41	
+
+For F(x):
+Possible peaks including: 22	42	
+
+Raw kmer depth estiamtion:
+Curve	peak	expect_depth
+k-mer species 20	20.9696
+k-mer individuals 22	21.0384
+
+The estimate peak number is 6
+No valley, and may be no sequencing error!
+Initial ai...
+i	a[i]	c[i]
+1	0.872825	20.9696
+2	0.0591176	41.9393
+3	0.0126655	62.9089
+4	0.00511779	83.8786
+5	0.00293967	104.848
+6	0.00180986	125.818
+i	b[i]	C[i]
+1	0.776873	21.0384
+2	0.102525	42.0768
+3	0.0321068	63.1151
+4	0.0176329	84.1535
+5	0.0126711	105.192
+6	0.00934727	126.23
+Initial ai and bi finished!
+start iterating using discrete model...
+C-iter number: 1	c distance: 1
+cvg is 20.9696 and node num is 101211427
+Cvg is 21.0384 and kmer num is 2442901555
+A-iter number: 1	distance: 1
+update now num: 101211427 now kmer: 2442901555
+A-iter number: 2	distance: 0.0080005
+update now num: 101211427 now kmer: 2442901555
+A-iter number: 3	distance: 0.000216786
+update now num: 101211427 now kmer: 2442901555
+For P(x):
+Possible peaks including: 20	56	158	
+the unique peak is 20
+For F(x):
+Possible peaks including: 22	57	
+the unique peak is 22
+C-iter number: 2	c distance: 0.000103993
+cvg is 20.9675 and node num is 101211427
+Cvg is 21.0312 and kmer num is 2442901555
+A-iter number: 1	distance: 1
+update now num: 101211427 now kmer: 2442901555
+For P(x):
+Possible peaks including: 20	56	158	
+the unique peak is 20
+For F(x):
+Possible peaks including: 22	56	
+the unique peak is 22
+
+Final estimation table:
+raw_peak	now_node	low_kmer	now_kmer	cvg	genome_size	a[1]	b[1]
+20	101211427	0	2442901555	20.9675	1.16509e+08	0.915339	0.796442
+Discrete mode estimation finished!
