@@ -1,16 +1,19 @@
+We have developed two implementations for GCE, the first gce-1.0.2 is 
+recommended for common users, and the latter gce-alternative can be used in 
+comparison and for developing new algorithms. Both take the kmerfreq output
+as input file, except for a little difference: gce-1.0.0 must remove the header
+lines and only keeps the data lines, while gce-alternative does not need that.
+
+1. gce-1.0.2
 
 GCE (genomic charactor estimator) is a bayes model based method to estimate the 
-genome size, genomic repeat content and the heterozygsis rate of the sequencing
-sample. The estimated result can be used to help design the sequencing strategy
-in de novo genome project.
+genome size ,genomic repeat content and the heterozygsis rate of the sequencing
+sample. The estimated result can be used to design the sequencing strategy.
 
 GCE is primarily hosted on BGI's ftp site (ftp://ftp.genomics.org.cn/pub/gce).
 Now the lastest version gce-1.0.2 is also available on Github (https://github.com/fanagislab/GCE).
-Note that gce-1.0.2 is compatible with the latest kmerfreq version 4.0 (max depth 65535).
-kmerfreq version 4.0 is available on Github (https://github.com/fanagislab/kmerfreq).
-
-Note that the estimation accuracy is also highly depended on the sequencing data quality, very low quality 
-sequencing data, in which no clear peak can be viewed on the kmer frequency curve, should not be used.
+Note that gce-1.0.2 is compatible with the latest kmerfreq version 4.0 (max
+depth 65535), which is available on Github (https://github.com/fanagislab/kmerfreq).
 
 
 INSTALLATION
@@ -66,51 +69,44 @@ For genome with higher heterzygous rate
 
 
 OUTPUT
-GCE generates two output files: 
+GCE generates two output files: gce.table and gce.log
 
-(1) Estimation result file: gce.table:
-there are two tables, one is ai table and the other is frequency table.
-#ai table:
-showing the estimated ci and ai for kmer species and Ci and bi for kmer individuals. 
-the range of i is from 1 to max peak.
-#i      c[i]    a[i]    C[i]    b[i]
-
-#frequency table:
-showing the raw depth distribution of kmer species(real_P(x)), the raw depth distribution
-of kmer individuals(real_F(x)), the estimated depth distribution of kmer species(est_P(x)) 
-and the estimated depth distribution of kmer individuals(est_F(x)).
-#depth  real_P(x)       real_F(x)       est_P(x)        est_F(x)
-
-For more details about kmer species and kmer individuals, please read the manuscript.
-
-(2) Estimation log file: gce.log
-
-The most valuable estimation results can be found at the file end:
+The most valuable estimation results can be found at the end of gce.log file:
 
 Final estimation table:
 raw_peak        effective_kmer_species  effective_kmer_individuals      coverage_depth  genome_size     a[1]    b[1]
 75      742400596       168346645871    75.8021 2.22087e+09     0.663012        0.271515
 
-genome_size = effective_kmer_individuals / coverage_depth;
-the genome size estimated here can be used in practise, and a[1] can be viewed as a marker for the uniquess of the genome, which reflects the repeat ratio.
+
+2. gce-alternative
+
+Function
+  This package was developed by Wei Fan, fanwei@caas.cn, which is an alternative implementation to liubinghang's GCE software (ftp://ftp.genomics.org.cn/pub/gce).
+
+Installation  
+  Except the two programs coded by C++, which needs "make" to compile, the other are perl programs.
+
+Input and output 
+  The output file from kmerfreq can be used as input file for all the programs here.
+
+Usage
+  a.Only estimate genome size, with erroneous k-mers excluded, and float-point estimatation of peak coverage value 
+	perl ../estimate_genome_size.pl reads.freq.stat
+  b.Estimate genome size as well as repeat and heterozygosity, using discrete model, suitable for theoretic and good sequencing data without coverage bias 
+	perl ../estimate_genome_character.pl ./reads.freq.stat 
+  c.Estimate genome size as well as repeat and heterozygosity, using continuous model, suitable for bad or common real sequencing data with severe coverage bias  
+	perl ../estimate_genome_character_real.pl ./reads.freq.stat
 
 
-PERFORMANCE
-gce is a extremely fast tool for estimating the genomic charactor. For the
-standard discrete model, the max memory is about 1.5MB, taking less than one
-second. For the continuous model, when setting -D 8, the max memeroy is about
-1.5MB, taking about 5 seconds. The memory and time cost is only related to the
-max kmer depth and the depth distribution, not related with K size.
+3. Reference
 
-COMMENTS/QUESTIONS/REQUESTS
-Please send an e-mail to binghang.liu@qq.com; fanweiagis@126.com;
-
-REFERENCE and CITATION
 Binghang Liu, Yujian Shi, Jianying Yuan, et al. and Wei Fan*. Estimation of genomic characteristics by analyzing k-mer frequency in de novo genome project. arXiv.org arXiv: 1308.2012. (2013)
 
 https://arxiv.org/abs/1308.2012
 
-INSTRUCTION and HELP
+4.Help 
 http://blog.sciencenet.cn/blog-3406804-1162384.html
 http://blog.sciencenet.cn/blog-3406804-1161524.html
 
+5. Contact
+Please send an e-mail to binghang.liu@qq.com  and fanweiagis@126.com;

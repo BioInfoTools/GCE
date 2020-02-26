@@ -1,3 +1,6 @@
+//Author: Binghang Liu
+//Modified by Wei fan, fanwei@caas.cn, at 2020/2/25
+
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -23,7 +26,7 @@ int mode = 0; //use discrete model(0) or continuous model(1)
 double cvg=0;
 double Cvg=0;
 int dis = 1; //distance between peaks.
-int Depth_Num=256; //max depth cut off.
+int Depth_Num=1000; //max depth cut off, space of depth: 256 for one-byte space, and 65536 for two-byte space
 
 
 uint64_t node_num=0;
@@ -89,7 +92,7 @@ void load_freq(string &file, ld_t *freq, ld_t *Freq)
 			kmer_num+= depth_num*num;
 		depth_num++;
 		getline(infile, str, '\n');
-		if(depth_num > Depth_Num)
+		if(depth_num >= Depth_Num)    //Modified by Wei Fan, old version: if(depth_num > Depth_Num)
 			break;
 	}
 	
@@ -749,7 +752,7 @@ void discrete_model()
 			<<final[i]/double(node_num)<<"\t"<<Final[i]/double(kmer_num)<<endl;
 	}
 
-
+	//The output format is modifed by fanwei, change now_kmer to (kmer_num - low_kmer_num)
 	if(hybrid)
 	{
 		cerr<<"for hybrid: a[1/2]="<< a[1]<<" a1="<< a[2]<<endl;
@@ -757,16 +760,16 @@ void discrete_model()
 		cerr<<"for hybrid: b[1/2]="<< b[1]<<" b1="<< b[2]<<endl;
 		cerr<<"kmer-individual heterozygous ratio is about "<< b[1]/(2 - b[1])<<endl;
   	cerr<<"\nFinal estimation table:\n";	
-  	cerr<<"raw_peak\tnow_node\tlow_kmer\tnow_kmer\tcvg\tgenome_size\ta[1/2]\ta[1]\tb[1/2]\tb[1]\n";
-  	cerr<<raw_peak<<"\t"<<now_node<<"\t"<<low_kmer_num <<"\t"<<now_kmer<< "\t"<< cvg<<"\t"<<double(kmer_num - low_kmer_num)/cvg<<"\t"
+  	cerr<<"raw_peak\teffective_kmer_species\teffective_kmer_individuals\tcoverage_depth\tgenome_size\ta[1/2]\ta[1]\tb[1/2]\tb[1]\n";
+  	cerr<<raw_peak<<"\t"<<now_node <<"\t"<< kmer_num - low_kmer_num << "\t"<< cvg<<"\t"<<double(kmer_num - low_kmer_num)/cvg<<"\t"
   	    <<a[1]<<"\t"<<a[2]<<"\t"<<b[1]<<"\t"<<b[2]<<endl;
 	}else{
   	cerr<<"\nFinal estimation table:\n";	
-  	cerr<<"raw_peak\tnow_node\tlow_kmer\tnow_kmer\tcvg\tgenome_size\ta[1]\tb[1]\n";
-  	cerr<<raw_peak<<"\t"<<now_node<<"\t"<<low_kmer_num <<"\t"<<now_kmer<< "\t"<< cvg<<"\t"<<double(kmer_num - low_kmer_num)/cvg<<"\t"
+  	cerr<<"raw_peak\teffective_kmer_species\teffective_kmer_individuals\tcoverage_depth\tgenome_size\ta[1]\tb[1]\n";
+  	cerr<<raw_peak<<"\t"<<now_node <<"\t"<< kmer_num - low_kmer_num << "\t"<< cvg<<"\t"<<double(kmer_num - low_kmer_num)/cvg<<"\t"
   	    <<a[1]<<"\t"<<b[1]<<endl;
 	}
-	cerr<<"Discrete mode estimation finished!"<<endl;
+	cerr<<"\nDiscrete mode estimation finished!"<<endl;
 
 }
 
@@ -1064,44 +1067,49 @@ void continuous_model()
 	get_unique(ah, au, a, c, cvg, peak_num, dis, hybrid, 1);
 	get_unique(bh, bu, b, C, Cvg, peak_num, dis, hybrid, 0);
 	
+	//The output format is modifed by fanwei, change now_kmer to (kmer_num - low_kmer_num)
 	cerr<<"\nFinal estimation table:"<<endl;
 	if(hybrid){
-		cerr<<"raw_peak\tnow_node\tlow_kmer\tnow_kmer\tcvg\tgenome_size\ta[1/2]\ta[1]\tb[1/2]\tb[1]\n";
-		cerr<<raw_peak<<"\t"<<now_node<<"\t"<<low_kmer_num <<"\t"<<now_kmer<< "\t"<< cvg <<"\t"<<double(kmer_num - low_kmer_num)/cvg<<"\t"
+		cerr<<"raw_peak\teffective_kmer_species\teffective_kmer_individuals\tcoverage_depth\tgenome_size\ta[1/2]\ta[1]\tb[1/2]\tb[1]\n";
+		cerr<<raw_peak<<"\t"<<now_node<<"\t"<<kmer_num - low_kmer_num<< "\t"<< cvg <<"\t"<<double(kmer_num - low_kmer_num)/cvg<<"\t"
 	  	  <<ah<<"\t"<<au<<"\t"<<bh<<"\t"<<bu<<endl;
 	}else{
-  	cerr<<"raw_peak\tnow_node\tlow_kmer\tnow_kmer\tcvg\tgenome_size\ta[1]\tb[1]\n";
-  	cerr<<raw_peak<<"\t"<<now_node<<"\t"<<low_kmer_num <<"\t"<<now_kmer<< "\t"<< cvg <<"\t"<<double(kmer_num - low_kmer_num)/cvg<<"\t"
+  	cerr<<"raw_peak\teffective_kmer_species\teffective_kmer_individuals\tcoverage_depth\tgenome_size\ta[1]\tb[1]\n";
+  	cerr<<raw_peak<<"\t"<<now_node <<"\t"<<kmer_num - low_kmer_num<< "\t"<< cvg <<"\t"<<double(kmer_num - low_kmer_num)/cvg<<"\t"
   	    <<au<<"\t"<<bu<<endl;
 	}
 	
-	cerr<<"continuous model estimation finished!\n";
+	cerr<<"\ncontinuous model estimation finished!\n";
 }
 
 void usage(void)
 {
 	cout<<"Usage:\t\tgce(genomic charactor estimator) [option]\n"
-	    <<"Version:\t1.0.0\n"
+	    <<"Version:\t1.0.2\n"
 	    <<"Author:\t\tBGI ShenZhen\n"
-	    <<"Contact:\tliubinghang@genomics.org.cn\n"
+	    <<"Contact:\tbinghang.liu@qq.com; fanweiagis@126.com;\n"
 	    <<"Date: \t"<<__DATE__<<"\t"<<__TIME__<<"\n"
-			<<"\t-f	<string>	depth frequency file\n"
-			<<"\t-c	<int>	expected depth for unique kmer\n"
-			<<"\t-g	<int>	total kmer number\n"
+			<<"\t-f	<string>	depth frequency file with two columns: depth value and kmer species number \n"
+			<<"\t-c	<int>	expected depth for unique kmer, which can be obtained by checking the data with human eyes\n"
+			<<"\t-g	<int>	total kmer number, i.e. total number of kmer individuals \n"
 			<<"\t-b	<int>	have bias(1) or not(0), default=" << bias <<"\n"
 			<<"\t-H	<int>	use hybrid mode(1) or not(0), default="<< hybrid <<"\n"
 			<<"\t-m	<int>	estimation mode: discrete mode(0) and continuous mode(1), default="<< mode <<"\n"
-			<<"\t-M	<int>	max depth value, default="<< Depth_Num<<"\n"
+			<<"\t-M	<int>	max depth value, information for larger depth will be ignored, default="<< Depth_Num<<"\n"
 			<<"\t-D	<int>	precision of expect value, default=" << dis <<"\n"
 			<<"\t-d	<float>	difference cut off, default="<< a_dis_cut_off<<"\n"
 			<<"\t-i	<int>	iterate cycle number cut off, default=" << iter_cut_off <<"\n"
 			<<"\t-h this help\n\n"
 	    <<"Example:\n"
-		<<"./gce -f 17mer.freq >gce.table 2>gce.log\n"
-	    <<"./gce -f 17mer.freq -c 20 -H 1 >gce.table 2>gce.log\n"
-	    <<"Attention:\n"
-	    <<"If there is clear hybrid peak, you need to set -H and -c at the same time\n"
-	    <<"If you use the continous model, you need to set -D at the same time\n\n";
+		<<"(1) Before run gce, firstly get the total kmer number and depth frequency file from the kmerfreq result file (example: AF.kmer.freq.stat) \n"
+		<<"     less AF.kmer.freq.stat | grep \"#Kmer indivdual number\" \n"
+		<<"     less AF.kmer.freq.stat | perl -ne 'next if(/^#/ || /^\\s/); print; ' | awk '{print $1\"\\t\"$2}' > AF.kmer.freq.stat.2colum \n"
+		<<"(2)Run gce for genome with lower heterzygous rate\n\t./gce -g 173854609857 -f AF.kmer.freq.stat.2colum >gce.table 2>gce.log\n"
+	    <<"(3)Run gce for genome with higher heterzygous rate\n\t./gce -g 173854609857 -f AF.kmer.freq.stat.2colum -c 75 -H 1 >gce2.table 2>gce2.log\n"
+	    <<"\nAttention:\n"
+		<<"  To perform accurate estimation, the total kmer number and the depth frequency file must both be given to gce.\n"
+		<<"  When use the hybrid mode, you need to set -H and -c at the same time;\n"
+	    <<"  When use the continous model, you need to set -D at the same time, but this is not recommended in practice;\n\n";
 	exit(0);
 }
 
