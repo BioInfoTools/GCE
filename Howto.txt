@@ -3,8 +3,8 @@ more information, you can read the published manuscript.
 
 1. How to finish a simple run?
 ./gce -f kmer_depth_file >gce.table 2>gce.log ##basic standard discrete model.
-./gce -f kmer_depth_file -c unique_depth -H 1 >gce.table 2>gce.log ##for heterozygous mode.
-./gce -f Kmer_depth_file -c unqiue_depth -m 1 -D 8 >gce.table 2> gce.log  ##for continuous model
+./gce -f kmer_depth_file -c kmer_num -H 1 >gce.table 2>gce.log ##for heterozygous mode.
+./gce -f Kmer_depth_file -c kmer_num -m 1 -D 8 >gce.table 2> gce.log  ##for continuous model
 
 2. How to get a proper genome size?
 Firstly, you need to set -g total_kmer_num. You can obtain the value from the output of kmer frequence count programs.
@@ -34,7 +34,7 @@ In the gce, we will estimate Kmer Heterozygous Ratio(KHR) based on the formula: 
 To get the Base Heterozygous Ratio(BHR), you can use the formula: BHR = KHR/Kmer(suppose each snp cause K new kmers).
 
 5. How to decide whether use continuous model or discrete model?
-The performance of the two model is quite similar. For real sequencing data, continuous model is more suitable, however, its stability should be improved.
+The performance of the two model is quite similar. For real sequencing data, it is proper to use continuous model.
 
 6. How to treat the situation when the peak recognized is wrong?
 You just set -c , then the peak around the c value will be recognized. This is

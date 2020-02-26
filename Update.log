@@ -1,3 +1,10 @@
+
+version v1.0.1 Mar 18th 2012
+-------------------------------------------
+1. changed the output detail.
+2. fixed the input file format bugs.
+
+
 version v1.0.0  Dec 9th 2011
 -------------------------------------------
 This is the first published version.

@@ -30,8 +30,8 @@ Options:
 	hybrid mode.
 -b	when there is sequencing bias, you need to set the value.
 
--m	estiation mode, there are standard discrete model(default) and continuous model. You can
-	set 1 to use continuous model, but its stability is not well.
+-m	estiation mode, there are standard discrete model(default) and continuous model, you can
+	set 1 to use continuous model.
 
 -D	set the raw distance for continuous model, which decide the peak
 	number.

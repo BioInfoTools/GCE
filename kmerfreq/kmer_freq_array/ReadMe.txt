@@ -7,7 +7,6 @@ This is a k-mer counter program (version 1.0), it counts k-mer frequence of both
 
 (1). kmer_freq
    The single thread version of k-mer frequence counter program.
-
 (2). kmer_freq_pfile
    The multiple thread version of k-mer frequence counter program.
    Each thread process a file, this can parallel both IO and CPU.
